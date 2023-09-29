@@ -9,24 +9,21 @@ use dialoguer::Input;
 use dialoguer::theme::ColorfulTheme;
 use serde::Serialize;
 
-use console::Style;
-
 
 #[derive(Serialize)]
-pub struct PVContext {
+pub struct PVCContext {
     app_name: String,
     storage_capacity: String,
-    storage_class_name: String,
 }
 
 
-pub struct PVCreator {
+pub struct PVCCreator {
 
 }
 
-impl ResourceCreator for PVCreator {
+impl ResourceCreator for PVCCreator {
 	fn get_resource_type(&self) -> crate::ResourceType::ResourceType {
-		return ResourceType::ResourceType::PV;
+		return ResourceType::ResourceType::PVC;
 	}
 
 	fn get_template_content(&self) -> String {
@@ -35,7 +32,7 @@ impl ResourceCreator for PVCreator {
 
 		let current_path = format!("{}/src/data/templates", current_dir);
 
-		let file_path = format!("{}/pv.yml.template", current_path);
+		let file_path = format!("{}/pvc.yml.template", current_path);
 
 		let contents = fs::read_to_string(file_path)
 		.expect("Should have been able to read the file");
@@ -44,8 +41,8 @@ impl ResourceCreator for PVCreator {
 	}
 
 	fn create_resource(&self, app_name: &String, app_location: &String) -> std::io::Result<()> {
-		println!("Creating PV.");
-
+		println!("Creating PVC.");
+		
 		let mut templates = tinytemplate::TinyTemplate::new();
 
 		let storage_capacity: String = Input::with_theme(&ColorfulTheme::default())
@@ -53,27 +50,21 @@ impl ResourceCreator for PVCreator {
         .interact_text()
         .unwrap();
 
-		let storage_class_name: String = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt("Enter storage class name")
-        .interact_text()
-        .unwrap();
-
 
 		let content = self.get_template_content();
 
-		templates.add_template("pv-template", &content).unwrap();
+		templates.add_template("pvc-template", &content).unwrap();
 
-		let context = PVContext {
+		let context = PVCContext {
 			app_name: app_name.to_string(),
 			storage_capacity: storage_capacity.to_string(),
-			storage_class_name: storage_class_name.to_string()
 		};
 
 		
 
-		let rendered = templates.render("pv-template", &context).unwrap();
+		let rendered = templates.render("pvc-template", &context).unwrap();
     	
-		let mut file = File::create(format!("{}/pv.yml", app_location))?;
+		let mut file = File::create(format!("{}/pvc.yml", app_location))?;
 
 		file.write_all(rendered.as_bytes())?;
 

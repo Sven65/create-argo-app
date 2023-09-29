@@ -70,8 +70,6 @@ fn main() {
             let creatorType = creator.get_resource_type();
 
             creatorType.get_creator().create_resource(&appName, &app_directory);
-
-            println!("  {}", selected[selection]);
         }
     }
 }

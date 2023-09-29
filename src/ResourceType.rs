@@ -1,5 +1,6 @@
 use core::fmt;
 
+use crate::resources::pvc::PVCCreator;
 use crate::resources::resource_creator::ResourceCreator;
 use crate::resources::pv::PVCreator;
 
@@ -34,7 +35,8 @@ impl CreationGetter for ResourceType {
 	fn get_creator(&self) -> Box<dyn ResourceCreator + 'static> {
 		match self {
 			ResourceType::PV => Box::new(PVCreator {}),
-			_ => panic!("This creator is not implemented.")
+            ResourceType::PVC => Box::new(PVCCreator {}),
+			_ => panic!("The creator for {} is not implemented.", self)
 		}
 	}
 }
