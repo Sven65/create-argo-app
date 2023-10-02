@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {app_name}-ingress-route
+spec:
+  entryPoints:
+    - {entrypoint}
+  routes:
+    - kind: Rule
+      match: Host(`{route_host_match}`)
+      services:
+        - name: {app_name}-service
+          port: {svc_port}
+  tls:
+    secretName: {tls_secret_name}

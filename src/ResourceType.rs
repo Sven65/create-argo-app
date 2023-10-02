@@ -3,6 +3,7 @@ use core::fmt;
 use crate::resources::pvc::PVCCreator;
 use crate::resources::resource_creator::ResourceCreator;
 use crate::resources::pv::PVCreator;
+use crate::resources::service::ServiceCreator;
 
 #[derive(Debug, Clone, Copy)]
 pub enum ResourceType {
@@ -36,6 +37,7 @@ impl CreationGetter for ResourceType {
 		match self {
 			ResourceType::PV => Box::new(PVCreator {}),
             ResourceType::PVC => Box::new(PVCCreator {}),
+            ResourceType::Service => Box::new(ServiceCreator { ports: vec![]}),
 			_ => panic!("The creator for {} is not implemented.", self)
 		}
 	}

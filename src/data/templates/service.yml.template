@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {app_name}-service
+  labels:
+    app: {app_name}
+spec:
+  ports:
+  {{ for port in ports }}
+    - port: {port.port}
+      targetPort: {port.target_port}
+      protocol: {port.protocol}
+  {{ endfor }}
+  selector:
+    app: {app_name}

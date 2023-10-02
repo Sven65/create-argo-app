@@ -40,7 +40,7 @@ impl ResourceCreator for PVCCreator {
 		contents
 	}
 
-	fn create_resource(&self, app_name: &String, app_location: &String) -> std::io::Result<()> {
+	fn create_resource(&mut self, app_name: &String, app_location: &String) -> std::io::Result<()> {
 		println!("Creating PVC.");
 		
 		let mut templates = tinytemplate::TinyTemplate::new();

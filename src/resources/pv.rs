@@ -9,8 +9,6 @@ use dialoguer::Input;
 use dialoguer::theme::ColorfulTheme;
 use serde::Serialize;
 
-use console::Style;
-
 
 #[derive(Serialize)]
 pub struct PVContext {
@@ -43,7 +41,7 @@ impl ResourceCreator for PVCreator {
 		contents
 	}
 
-	fn create_resource(&self, app_name: &String, app_location: &String) -> std::io::Result<()> {
+	fn create_resource(&mut self, app_name: &String, app_location: &String) -> std::io::Result<()> {
 		println!("Creating PV.");
 
 		let mut templates = tinytemplate::TinyTemplate::new();
