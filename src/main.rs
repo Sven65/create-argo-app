@@ -1,11 +1,9 @@
 use dialoguer::{theme::ColorfulTheme, MultiSelect, Input};
 use std::{fs, process::{self}, path::PathBuf, env::{self}};
 
-use crate::ResourceType::CreationGetter;
-
-pub mod ResourceType;
+pub mod resource_type;
 pub mod resources;
-
+use crate::resource_type::CreationGetter;
 
 fn prepare_fs(app_path: &String) -> std::io::Result<()>{
     fs::create_dir_all(app_path)?;
@@ -17,7 +15,7 @@ pub fn get_current_working_dir() -> std::io::Result<PathBuf> {
 }
 
 fn main() {
-    let appName: String = Input::with_theme(&ColorfulTheme::default())
+    let app_name: String = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Enter app name")
         .interact_text()
         .unwrap();
@@ -34,12 +32,12 @@ fn main() {
     println!("Creating apps in {}", app_directory);
 
     let selected = &[
-        ResourceType::ResourceType::Deployment,
-        ResourceType::ResourceType::PV,
-        ResourceType::ResourceType::PVC,
-        ResourceType::ResourceType::Deployment,
-        ResourceType::ResourceType::Service,
-        ResourceType::ResourceType::IngressRoute,
+        resource_type::ResourceType::Deployment,
+        resource_type::ResourceType::PV,
+        resource_type::ResourceType::PVC,
+        resource_type::ResourceType::Deployment,
+        resource_type::ResourceType::Service,
+        resource_type::ResourceType::IngressRoute,
     ];
 
     let defaults = &[false, false, false, false];
@@ -63,13 +61,13 @@ fn main() {
         }
 
         for selection in selections {
-            let resType: ResourceType::ResourceType = selected[selection].try_into().unwrap();
+            let res_type: resource_type::ResourceType = selected[selection].try_into().unwrap();
 
-            let creator = resType.to_owned().get_creator();
+            let creator = res_type.to_owned().get_creator();
 
-            let creatorType = creator.get_resource_type();
+            let creator_type = creator.get_resource_type();
 
-            creatorType.get_creator().create_resource(&appName, &app_directory);
+            creator_type.get_creator().create_resource(&app_name, &app_directory).unwrap();
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::{ResourceType, get_current_working_dir};
+use crate::{resource_type, get_current_working_dir};
 
 use super::resource_creator::ResourceCreator;
 
@@ -86,8 +86,8 @@ impl ServiceCreator {
 }
 
 impl ResourceCreator for ServiceCreator {
-	fn get_resource_type(&self) -> crate::ResourceType::ResourceType {
-		return ResourceType::ResourceType::Service;
+	fn get_resource_type(&self) -> crate::resource_type::ResourceType {
+		return resource_type::ResourceType::Service;
 	}
 
 	fn get_template_content(&self) -> String {
@@ -115,11 +115,6 @@ impl ResourceCreator for ServiceCreator {
 		templates.add_template("service-template", &content).unwrap();
 
 		self.port_entry();
-
-		println!("Got {} ports", self.ports.len());
-
-	
-
 		let context = ServiceContext {
 			app_name: app_name.to_string(),
 			ports: self.ports.clone(),

@@ -6,10 +6,16 @@ spec:
   entryPoints:
     - {entrypoint}
   routes:
+    {{ for route in routes }}
     - kind: Rule
-      match: Host(`{route_host_match}`)
+      match: Host(`{route.route_host_match}`)
       services:
+        {{ for service in route.services }}
         - name: {app_name}-service
-          port: {svc_port}
+          port: {service.svc_port}
+        {{ endfor }}
+    {{ endfor }}
+  {{ if tls }}
   tls:
     secretName: {tls_secret_name}
+  {{ endif }}

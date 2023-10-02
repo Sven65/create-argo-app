@@ -1,4 +1,4 @@
-use crate::{ResourceType, get_current_working_dir};
+use crate::{resource_type, get_current_working_dir};
 
 use super::resource_creator::ResourceCreator;
 
@@ -23,8 +23,8 @@ pub struct PVCreator {
 }
 
 impl ResourceCreator for PVCreator {
-	fn get_resource_type(&self) -> crate::ResourceType::ResourceType {
-		return ResourceType::ResourceType::PV;
+	fn get_resource_type(&self) -> crate::resource_type::ResourceType {
+		return resource_type::ResourceType::PV;
 	}
 
 	fn get_template_content(&self) -> String {
