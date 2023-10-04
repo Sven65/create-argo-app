@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {app_name}-deployment
+  labels:
+    app: {app_name}
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: {app_name}
+  template:
+    metadata:
+      labels:
+        app: {app_name}
+        expose: enabled
+    spec:
+    {{ if volumes }}
+      volumes:
+        {{ for volume in volumes }}
+        - name: {volume.name}
+          persistentVolumeClaim:
+            claimName: {volume.pvc_claim_name}
+        {{ endfor }}
+      {{ endif }}
+      containers:
+        {{ for container in containers }}
+        - name: {container.name}
+          image: {container.image}
+          {{ if container.volume_mounts }}
+          volumeMounts:
+            {{ for volume in container.volume_mounts }}
+            - mountPath: {volume.mount_path}
+              name: { volume.name }
+            {{ endfor }}
+          {{ endif }}
+          securityContext:
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+          resources:
+            requests:
+              memory: "16Gi"
+              cpu: "1000m"
+            limits:
+              memory: "20Gi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 80
+          envFrom:
+            - secretRef:
+                name: f-ai-env
+        {{ endfor }}

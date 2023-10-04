@@ -35,7 +35,7 @@ fn main() {
         resource_type::ResourceType::Deployment,
         resource_type::ResourceType::PV,
         resource_type::ResourceType::PVC,
-        resource_type::ResourceType::Deployment,
+        resource_type::ResourceType::HPA,
         resource_type::ResourceType::Service,
         resource_type::ResourceType::IngressRoute,
     ];

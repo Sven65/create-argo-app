@@ -1,5 +1,6 @@
 use core::fmt;
 
+use crate::resources::deployment::DeploymentCreator;
 use crate::resources::ingress_route::IngressRouteCreator;
 use crate::resources::pvc::PVCCreator;
 use crate::resources::resource_creator::ResourceCreator;
@@ -40,6 +41,7 @@ impl CreationGetter for ResourceType {
             ResourceType::PVC => Box::new(PVCCreator {}),
             ResourceType::Service => Box::new(ServiceCreator { ports: vec![]}),
             ResourceType::IngressRoute => Box::new(IngressRouteCreator {}),
+            ResourceType::Deployment => Box::new(DeploymentCreator {}),
 			_ => panic!("The creator for {} is not implemented.", self)
 		}
 	}
